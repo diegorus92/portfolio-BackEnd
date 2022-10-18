@@ -334,10 +334,10 @@ ENGINE = InnoDB;
 -- Table `portfolio`.`Enterprises`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `portfolio`.`Enterprises` (
-  `enterpriseNameId` INT NOT NULL,
+  `enterpriseId` INT NOT NULL,
   `name` VARCHAR(45) NOT NULL,
-  `logo` TEXT(1000) NULL,
-  PRIMARY KEY (`enterpriseNameId`))
+  `logo` VARCHAR(45) NULL,
+  PRIMARY KEY (`enterpriseId`))
 ENGINE = InnoDB;
 
 
@@ -345,14 +345,14 @@ ENGINE = InnoDB;
 -- Table `portfolio`.`Enterprises_has_Cities`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `portfolio`.`Enterprises_has_Cities` (
-  `enterpriseNameId` INT NOT NULL,
+  `enterpriseId` INT NOT NULL,
   `cityId` INT NOT NULL,
-  PRIMARY KEY (`enterpriseNameId`, `cityId`),
+  PRIMARY KEY (`enterpriseId`, `cityId`),
   INDEX `fk_Enterprises_has_Cities_Cities1_idx` (`cityId` ASC) VISIBLE,
-  INDEX `fk_Enterprises_has_Cities_Enterprises1_idx` (`enterpriseNameId` ASC) VISIBLE,
+  INDEX `fk_Enterprises_has_Cities_Enterprises1_idx` (`enterpriseId` ASC) VISIBLE,
   CONSTRAINT `fk_Enterprises_has_Cities_Enterprises1`
-    FOREIGN KEY (`enterpriseNameId`)
-    REFERENCES `portfolio`.`Enterprises` (`enterpriseNameId`)
+    FOREIGN KEY (`enterpriseId`)
+    REFERENCES `portfolio`.`Enterprises` (`enterpriseId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Enterprises_has_Cities_Cities1`
@@ -368,9 +368,9 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `portfolio`.`ProfessionalExperience_has_Enterprises` (
   `professionalExpId` INT NOT NULL,
-  `enterpriseNameId` INT NOT NULL,
-  PRIMARY KEY (`professionalExpId`, `enterpriseNameId`),
-  INDEX `fk_ProfessionalExperience_has_Enterprises_Enterprises1_idx` (`enterpriseNameId` ASC) VISIBLE,
+  `enterpriseId` INT NOT NULL,
+  PRIMARY KEY (`professionalExpId`, `enterpriseId`),
+  INDEX `fk_ProfessionalExperience_has_Enterprises_Enterprises1_idx` (`enterpriseId` ASC) VISIBLE,
   INDEX `fk_ProfessionalExperience_has_Enterprises_ProfessionalExper_idx` (`professionalExpId` ASC) VISIBLE,
   CONSTRAINT `fk_ProfessionalExperience_has_Enterprises_ProfessionalExperie1`
     FOREIGN KEY (`professionalExpId`)
@@ -378,8 +378,8 @@ CREATE TABLE IF NOT EXISTS `portfolio`.`ProfessionalExperience_has_Enterprises` 
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_ProfessionalExperience_has_Enterprises_Enterprises1`
-    FOREIGN KEY (`enterpriseNameId`)
-    REFERENCES `portfolio`.`Enterprises` (`enterpriseNameId`)
+    FOREIGN KEY (`enterpriseId`)
+    REFERENCES `portfolio`.`Enterprises` (`enterpriseId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -402,6 +402,55 @@ CREATE TABLE IF NOT EXISTS `portfolio`.`Institutions_has_Cities` (
   CONSTRAINT `fk_Institutions_has_Cities_Cities1`
     FOREIGN KEY (`cityId`)
     REFERENCES `portfolio`.`Cities` (`cityId`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `portfolio`.`ProfessionalExperience_has_Enterprises_has_Cities`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `portfolio`.`ProfessionalExperience_has_Enterprises_has_Cities` (
+  `ProfessionalExperience_User_userId` INT NOT NULL,
+  `ProfessionalExperience_professionalExpId` INT NOT NULL,
+  `Enterprises_has_Cities_enterpriseId` INT NOT NULL,
+  `Enterprises_has_Cities_cityId` INT NOT NULL,
+  PRIMARY KEY (`ProfessionalExperience_User_userId`, `ProfessionalExperience_professionalExpId`, `Enterprises_has_Cities_enterpriseId`, `Enterprises_has_Cities_cityId`),
+  INDEX `fk_ProfessionalExperience_has_Enterprises_has_Cities_Enterp_idx` (`Enterprises_has_Cities_enterpriseId` ASC, `Enterprises_has_Cities_cityId` ASC) VISIBLE,
+  INDEX `fk_ProfessionalExperience_has_Enterprises_has_Cities_Profes_idx` (`ProfessionalExperience_professionalExpId` ASC, `ProfessionalExperience_User_userId` ASC) VISIBLE,
+  CONSTRAINT `fk_ProfessionalExperience_has_Enterprises_has_Cities_Professi1`
+    FOREIGN KEY (`ProfessionalExperience_professionalExpId` , `ProfessionalExperience_User_userId`)
+    REFERENCES `portfolio`.`ProfessionalExperience` (`professionalExpId` , `User_userId`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_ProfessionalExperience_has_Enterprises_has_Cities_Enterpri1`
+    FOREIGN KEY (`Enterprises_has_Cities_enterpriseId` , `Enterprises_has_Cities_cityId`)
+    REFERENCES `portfolio`.`Enterprises_has_Cities` (`enterpriseId` , `cityId`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `portfolio`.`Education_has_Institutions_has_Cities`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `portfolio`.`Education_has_Institutions_has_Cities` (
+  `Education_User_userId` INT NOT NULL,
+  `Education_educationId` INT NOT NULL,
+  `Education_institutionId` INT NOT NULL,
+  `Institutions_has_Cities_institutionId` INT NOT NULL,
+  `Institutions_has_Cities_cityId` INT NOT NULL,
+  PRIMARY KEY (`Education_User_userId`, `Education_educationId`, `Education_institutionId`, `Institutions_has_Cities_institutionId`, `Institutions_has_Cities_cityId`),
+  INDEX `fk_Education_has_Institutions_has_Cities_Institutions_has_C_idx` (`Institutions_has_Cities_institutionId` ASC, `Institutions_has_Cities_cityId` ASC) VISIBLE,
+  INDEX `fk_Education_has_Institutions_has_Cities_Education1_idx` (`Education_educationId` ASC, `Education_User_userId` ASC, `Education_institutionId` ASC) VISIBLE,
+  CONSTRAINT `fk_Education_has_Institutions_has_Cities_Education1`
+    FOREIGN KEY (`Education_educationId` , `Education_User_userId` , `Education_institutionId`)
+    REFERENCES `portfolio`.`Education` (`educationId` , `User_userId` , `institutionId`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Education_has_Institutions_has_Cities_Institutions_has_Cit1`
+    FOREIGN KEY (`Institutions_has_Cities_institutionId` , `Institutions_has_Cities_cityId`)
+    REFERENCES `portfolio`.`Institutions_has_Cities` (`institutionId` , `cityId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
