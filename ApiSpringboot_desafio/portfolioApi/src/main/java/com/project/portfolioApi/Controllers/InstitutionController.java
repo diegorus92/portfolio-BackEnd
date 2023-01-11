@@ -4,7 +4,9 @@
  */
 package com.project.portfolioApi.Controllers;
 
+import com.project.portfolioApi.Models.City;
 import com.project.portfolioApi.Models.Institution;
+import com.project.portfolioApi.Services.ICityService;
 import com.project.portfolioApi.Services.IInstitutionService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,9 @@ public class InstitutionController {
     
     @Autowired
     IInstitutionService interInstiServ;
+    
+    @Autowired
+    ICityService interCityServ;
     
     @GetMapping("/institution/get")
     @ResponseBody
@@ -67,6 +72,27 @@ public class InstitutionController {
         interInstiServ.createInstitution(instiToUpdate);
         
         return new ResponseEntity<>("Education successfuly updated", HttpStatus.OK);
+    }
+    
+    @PutMapping("institution/{institutionId}/relationship/{cityId}")
+    public ResponseEntity<String> relateInstitutionWithCity(@PathVariable Long institutionId, @PathVariable Long cityId){
+        
+        Institution insti = interInstiServ.getInstitutionById(institutionId);
+        City city = interCityServ.getCityById(cityId);
+        
+        if(insti == null)
+            return new ResponseEntity("Institution not found", HttpStatus.NO_CONTENT);
+        
+        if(city == null)
+            return new ResponseEntity("Institution not found", HttpStatus.NO_CONTENT);
+        
+        insti.getCities().add(city);
+        city.getInstitutions().add(insti);
+        
+        interInstiServ.createInstitution(insti);
+        interCityServ.createCity(city);
+        
+        return new ResponseEntity("Institution has been related with a City", HttpStatus.OK);
     }
     
     @DeleteMapping("/institution/delete/{id}")

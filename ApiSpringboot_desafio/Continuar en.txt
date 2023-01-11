@@ -1,5 +1,9 @@
 Desarrollo de demas capas del Model City.class, 
 	de Relacion: 
-		-Muchos a Muchos con Institution; 
-		-Muchos a Uno con Country; 
+		-Muchos a Muchos con Institution; ---> OK
+ 
+		-Muchos a Uno con Country ---> OK
+			-Desarrollando capas de Country; ---> OK 
+
 		-Muchos a Muchos con Enterprise
+			-Desarrollando capas de Enterprise;
