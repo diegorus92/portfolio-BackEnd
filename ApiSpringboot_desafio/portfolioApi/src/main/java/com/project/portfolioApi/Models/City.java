@@ -36,4 +36,10 @@ public class City {
     
     @ManyToOne
     private Country country;
+    
+    @OneToMany
+    @JoinTable(name="Enterprises_has_Cities",
+            joinColumns=@JoinColumn(name="cityId"),
+            inverseJoinColumns=@JoinColumn(name="enterpriseId"))
+    private List<Enterprise> enterprises;
 }

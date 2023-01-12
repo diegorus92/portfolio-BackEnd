@@ -1,10 +1,14 @@
 
 package com.project.portfolioApi.Models;
 
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,4 +24,10 @@ public class Enterprise {
     
     private String name;
     private String logo;
+    
+    @OneToMany
+    @JoinTable(name="Enterprises_has_Cities",
+            joinColumns=@JoinColumn(name="enterpriseId"),
+            inverseJoinColumns=@JoinColumn(name="cityId"))
+    private List<City> cities;
 }
