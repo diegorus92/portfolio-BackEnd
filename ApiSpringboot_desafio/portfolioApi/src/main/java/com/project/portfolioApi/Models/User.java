@@ -31,4 +31,10 @@ public class User {
     
     @OneToMany(mappedBy="user")
     private List<Education> educationList;
+    
+    @OneToMany(mappedBy="user")
+    private List<ProfessionalExperience> professionalExperiences;
+    
+    @OneToMany(mappedBy="user")
+    private List<Interest> interests;
 }

@@ -30,4 +30,10 @@ public class Enterprise {
             joinColumns=@JoinColumn(name="enterpriseId"),
             inverseJoinColumns=@JoinColumn(name="cityId"))
     private List<City> cities;
+    
+    @OneToMany
+    @JoinTable(name="ProfessionalExperience_has_Enterprise",
+            joinColumns=@JoinColumn(name="enterpriseId"),
+            inverseJoinColumns=@JoinColumn(name="professionalExpId"))
+    private List<ProfessionalExperience> professionalExperiences;
 }

@@ -47,7 +47,7 @@ public class EnterpriseController {
     }
     
     @PostMapping("/enterprise/create/{cityId}")
-    public String createInstitution(@RequestBody Enterprise newEnterprise, @PathVariable Long cityId){
+    public String createEnterprise(@RequestBody Enterprise newEnterprise, @PathVariable Long cityId){
         
         City cityTarget = interCityServ.getCityById(cityId);
         if(cityTarget == null)
@@ -82,7 +82,7 @@ public class EnterpriseController {
     }
     
     @DeleteMapping("/enterprise/delete/{id}")
-    public String deleteCity(@PathVariable Long id){
+    public String deleteEnterprise(@PathVariable Long id){
         
         interEnterServ.deleteEnterprise(id);
         

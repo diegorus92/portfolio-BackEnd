@@ -8,13 +8,19 @@ Desarrollo de demas capas del Model City.class, ---> OK
 		-Muchos a Muchos con Enterprise ---> OK
 			-Desarrollando capas de Enterprise; ---> OK
 
----------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------
 
-Dessarrollo capas del Model ProfessionalExperience
-	Implementar RestController;
+Dessarrollo capas del Model ProfessionalExperience ---> OK
+	Implementar RestController; ---> OK
+	Desarrollo de relaciones:
+		-Muchos a Uno con User; ---> OK
+
+		-Muchos a Muchos con Enterprise; ---> OK
+
+		-Muchos a Muchos con tabla intermedia Enterprise_has_Cities; ---> SALTEADO
+
+-----------------------------------------------------------------------------------------------
+
+Dessarrollo capas del Model Idiom 
 	Desarrollo de relaciones:
 		-Muchos a Uno con User;
-
-		-Muchos a Muchos con Enterprise;
-
-		-Muchos a Muchos con tabla intermedia Enterprise_has_Cities
