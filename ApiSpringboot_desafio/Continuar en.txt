@@ -21,6 +21,22 @@ Dessarrollo capas del Model ProfessionalExperience ---> OK
 
 -----------------------------------------------------------------------------------------------
 
-Dessarrollo capas del Model Idiom 
+Dessarrollo capas del Model Idiom ---> OK 
 	Desarrollo de relaciones:
-		-Muchos a Uno con User;
+		-Muchos a Uno con User; ---> OK
+
+-----------------------------------------------------------------------------------------------
+
+Desarrollo capas del model ContactIcon y relaciones --->OK
+
+-----------------------------------------------------------------------------------------------
+
+Dessarrollo capas del model SoftwareValue ---> OK
+
+-----------------------------------------------------------------------------------------------
+
+Desarrollo capas del model Software y relaciones; --->OK
+
+-----------------------------------------------------------------------------------------------
+
+Desarrollo de capas del model Project y relaciones;

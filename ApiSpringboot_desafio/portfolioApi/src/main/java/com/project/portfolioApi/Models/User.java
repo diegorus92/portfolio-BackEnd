@@ -37,4 +37,19 @@ public class User {
     
     @OneToMany(mappedBy="user")
     private List<Interest> interests;
+    
+    @OneToMany(mappedBy="user")
+    private List<Idiom> idioms;
+    
+    @OneToMany(mappedBy="user")
+    private List<SocialNet> socialNets;
+    
+    @OneToMany(mappedBy="user")
+    private List<Contact> contacts;
+    
+    @OneToMany(mappedBy="user")
+    private List<Software> softwares;
+    
+    @OneToMany(mappedBy="user")
+    private List<Project> projects;
 }

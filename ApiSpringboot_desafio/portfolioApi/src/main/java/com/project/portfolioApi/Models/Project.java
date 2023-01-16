@@ -13,17 +13,19 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
-@Table(name="idioms")
+@Entity 
+@Table(name="Projects")
 @Getter @Setter
-public class Idiom {
+public class Project {
     
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long idiomId;
+    private Long projectId;
     
-    private String name;
-    private String value;
+    private String title;
+    private String description;
+    private String imageSrc;
+    private String projectLink;
     
     @ManyToOne
     private User user;

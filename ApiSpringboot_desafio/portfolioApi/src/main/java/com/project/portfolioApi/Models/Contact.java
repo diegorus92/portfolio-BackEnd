@@ -13,18 +13,21 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
-@Table(name="idioms")
+@Entity 
+@Table(name="Contact")
 @Getter @Setter
-public class Idiom {
+public class Contact {
     
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long idiomId;
+    private Long contactId;
     
-    private String name;
-    private String value;
+    private String data;
     
     @ManyToOne
-    private User user;
+    User user;
+    
+    @ManyToOne
+    ContactIcon contactIcon;
+    
 }

@@ -4,6 +4,7 @@
  */
 package com.project.portfolioApi.Models;
 
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,17 +14,20 @@ import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
-@Table(name="idioms")
+@Entity 
+@Table(name="SocialNet")
 @Getter @Setter
-public class Idiom {
+public class SocialNet {
     
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long idiomId;
+    private Long socialNetId;
     
-    private String name;
-    private String value;
+    private String iconName;
+    private String link;
+    
+    @ManyToOne
+    private SocialNetIcon socialNetIcon;
     
     @ManyToOne
     private User user;
