@@ -51,7 +51,7 @@ public class SoftwareController {
         return software;
     }
     
-    @PostMapping("/softwarevalue/create/{softwareValueId}/{userId}")
+    @PostMapping("/software/create/{softwareValueId}/{userId}")
     public String createSoftware(@RequestBody Software newSoftware,
                                 @PathVariable Long softwareValueId,
                                 @PathVariable Long userId){
