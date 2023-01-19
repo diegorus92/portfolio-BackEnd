@@ -1,8 +1,11 @@
 
 package com.project.portfolioApi.Controllers;
 
+import com.project.portfolioApi.DTO.CityDTO;
 import com.project.portfolioApi.DTO.CountryDTO;
+import com.project.portfolioApi.Models.City;
 import com.project.portfolioApi.Models.Country;
+import com.project.portfolioApi.Services.ICityService;
 import com.project.portfolioApi.Services.ICountryService;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +27,7 @@ public class CountryController {
     
     @Autowired
     ICountryService interCountryServ;
+
     
     @GetMapping("/country/get")
     @ResponseBody
@@ -38,11 +42,26 @@ public class CountryController {
         return countriesDto;
     }
     
+    //Para devolver la lista de ciudades relacionadas al país correspondiente al ID ingresado
+    @GetMapping("/country/get/cities/{countryId}")
+    @ResponseBody
+    public List<CityDTO> citiesOfCountry(@PathVariable Long countryId){
+        Country c = interCountryServ.getCountryById(countryId);
+        List<CityDTO> citiesOfCountry = new ArrayList();
+
+        for(City cty : c.getCities()){
+            citiesOfCountry.add(new CityDTO(cty.getName()));
+        }
+
+        return citiesOfCountry;
+    }
+    
     @GetMapping("/country/get/{id}")
-    public Country getCountryById(@PathVariable Long id){
+    public CountryDTO getCountryById(@PathVariable Long id){
         Country country = interCountryServ.getCountryById(id);
+        CountryDTO countryDto = new CountryDTO(country.getName());
         
-        return country;
+        return countryDto;
     }
     
     @PostMapping("/country/create")

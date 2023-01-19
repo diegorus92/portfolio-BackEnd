@@ -1,10 +1,12 @@
 
 package com.project.portfolioApi.Controllers;
 
+import com.project.portfolioApi.DTO.CityDTO;
 import com.project.portfolioApi.Models.City;
 import com.project.portfolioApi.Models.Country;
 import com.project.portfolioApi.Services.ICityService;
 import com.project.portfolioApi.Services.ICountryService;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,17 +32,24 @@ public class CityController {
     
     @GetMapping("/city/get")
     @ResponseBody
-    public List<City> getCities(){
-        List cities = interCityServ.getCities();
-        
-        return cities;
+    public List<CityDTO> getCities(){
+        List<City> cities = interCityServ.getCities();
+        List<CityDTO> citiesDto = new ArrayList();
+
+        for(City cty : cities){
+            citiesDto.add(new CityDTO(cty.getName()));
+        }
+
+        return citiesDto;
     }
     
+
     @GetMapping("/city/get/{id}")
-    public City getCityById(@PathVariable Long id){
+    public CityDTO getCityById(@PathVariable Long id){
         City city = interCityServ.getCityById(id);
+        CityDTO cityDto = new CityDTO(city.getName());
         
-        return city;
+        return cityDto;
     }
     
     @PostMapping("/city/create/{countryId}")
@@ -51,9 +60,9 @@ public class CityController {
             return "Country not found";
         
         countryTarget.getCities().add(newCity);
+        interCountryServ.createCountry(countryTarget);
         
         newCity.setCountry(countryTarget);
-        
         interCityServ.createCity(newCity);
         
         return "City creation success!";
