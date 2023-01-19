@@ -43,7 +43,7 @@ public class CityController {
         return city;
     }
     
-    @PostMapping("/institution/create/{countryId}")
+    @PostMapping("/city/create/{countryId}")
     public String createInstitution(@RequestBody City newCity, @PathVariable Long countryId){
         
         Country countryTarget = interCountryServ.getCountryById(countryId);

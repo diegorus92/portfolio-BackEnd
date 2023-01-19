@@ -1,8 +1,10 @@
 
 package com.project.portfolioApi.Controllers;
 
+import com.project.portfolioApi.DTO.CountryDTO;
 import com.project.portfolioApi.Models.Country;
 import com.project.portfolioApi.Services.ICountryService;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,10 +27,15 @@ public class CountryController {
     
     @GetMapping("/country/get")
     @ResponseBody
-    public List<Country> getCountries(){
-        List countries = interCountryServ.getCountries();
+    public List<CountryDTO> getCountries(){
+        List <Country> countries = interCountryServ.getCountries();
+        List<CountryDTO> countriesDto = new ArrayList();
         
-        return countries;
+        for(Country c : countries){
+            countriesDto.add(new CountryDTO(c.getName()));
+        }
+        
+        return countriesDto;
     }
     
     @GetMapping("/country/get/{id}")
@@ -39,7 +46,7 @@ public class CountryController {
     }
     
     @PostMapping("/country/create")
-    public String createInstitution(@RequestBody Country newCountry){
+    public String createCountry(@RequestBody Country newCountry){
         
         interCountryServ.createCountry(newCountry);
         
