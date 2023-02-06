@@ -4,10 +4,12 @@
  */
 package com.project.portfolioApi.Controllers;
 
+import com.project.portfolioApi.DTO.EnterpriseDTO;
 import com.project.portfolioApi.Models.City;
 import com.project.portfolioApi.Models.Enterprise;
 import com.project.portfolioApi.Services.ICityService;
 import com.project.portfolioApi.Services.IEnterpriseService;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,17 +35,25 @@ public class EnterpriseController {
     
     @GetMapping("/enterprise/get")
     @ResponseBody
-    public List<Enterprise> getEnterprises(){
-        List enterprises = interEnterServ.getEnterprises();
+    public List<EnterpriseDTO> getEnterprises(){
+        List<Enterprise> enterprises = interEnterServ.getEnterprises();
+        List<EnterpriseDTO> enterprisesDTO = new ArrayList();
         
-        return enterprises;
+        for(Enterprise e : enterprises){
+            enterprisesDTO.add(new EnterpriseDTO(e.getName(),e.getLogo()));
+        }
+        
+        
+        
+        return enterprisesDTO;
     }
     
     @GetMapping("/enterprise/get/{id}")
-    public Enterprise getEnterpriseById(@PathVariable Long id){
+    public EnterpriseDTO getEnterpriseById(@PathVariable Long id){
         Enterprise enterprise = interEnterServ.getEnterpriseById(id);
+        EnterpriseDTO enterpriseDTO = new EnterpriseDTO(enterprise.getName(), enterprise.getLogo());
         
-        return enterprise;
+        return enterpriseDTO;
     }
     
     @PostMapping("/enterprise/create/{cityId}")
