@@ -43,7 +43,11 @@ Desarrollo de capas del model Project y relaciones; ---> OK
 
 -----------------------------------------------------------------------------------------------
 
-Desarrollar Modelos y relaciones para Skill y SkillType
+Desarrollar Modelos y relaciones para Skill y SkillType; ---> OK
+
+-----------------------------------------------------------------------------------------------
+
+Desarrollar Relaciones entre Skill, SkillType y User;
 
 -----------------------------------------------------------------------------------------------
 
