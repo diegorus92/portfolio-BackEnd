@@ -4,10 +4,12 @@
  */
 package com.project.portfolioApi.Controllers;
 
+import com.project.portfolioApi.DTO.InstitutionDTO;
 import com.project.portfolioApi.Models.City;
 import com.project.portfolioApi.Models.Institution;
 import com.project.portfolioApi.Services.ICityService;
 import com.project.portfolioApi.Services.IInstitutionService;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,17 +35,27 @@ public class InstitutionController {
     
     @GetMapping("/institution/get")
     @ResponseBody
-    public List<Institution> getInstitutions(){
-        List institutions = interInstiServ.getInstitution();
+    public List<InstitutionDTO> getInstitutions(){
+        List<Institution> institutions = interInstiServ.getInstitution();
+        List<InstitutionDTO> institutionsDTO = new ArrayList();
         
-        return institutions;
+        for(Institution i : institutions){
+            institutionsDTO.add(new InstitutionDTO(i.getName(), i.getLogo()));
+        }
+        
+        return institutionsDTO;
     }
     
     @GetMapping("/institution/get/{id}")
-    public Institution getInstitutionById(@PathVariable Long id){
+    public InstitutionDTO getInstitutionById(@PathVariable Long id){
         Institution institution = interInstiServ.getInstitutionById(id);
         
-        return institution;
+        if(institution == null)
+            return null;
+        
+        InstitutionDTO institutionDTO = new InstitutionDTO(institution.getName(), institution.getLogo());
+        
+        return institutionDTO;
     }
     
     @PostMapping("/institution/create")

@@ -4,12 +4,14 @@
  */
 package com.project.portfolioApi.Controllers;
 
+import com.project.portfolioApi.DTO.ProfessionalExperienceDTO;
 import com.project.portfolioApi.Models.Enterprise;
 import com.project.portfolioApi.Models.ProfessionalExperience;
 import com.project.portfolioApi.Models.User;
 import com.project.portfolioApi.Services.IEnterpriseService;
 import com.project.portfolioApi.Services.IProfessionalExperienceService;
 import com.project.portfolioApi.Services.IUserService;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,17 +41,27 @@ public class ProfessionalExperienceController {
     
     @GetMapping("/professional_experience/get")
     @ResponseBody
-    public List<ProfessionalExperience> getProfessionalExperiences(){
-        List proExp = interProExpServ.getProfessionalExperiences();
+    public List<ProfessionalExperienceDTO> getProfessionalExperiences(){
+        List<ProfessionalExperience> proExp = interProExpServ.getProfessionalExperiences();
+        List proExpDTO = new ArrayList();
         
-        return proExp;
+        for(ProfessionalExperience p : proExp){
+            proExpDTO.add(new ProfessionalExperienceDTO(p.getPosition(), p.getStartDate(), p.getEndDate(), p.getDescription()));
+        }
+        
+        return proExpDTO;
     }
     
     @GetMapping("/professional_experience/get/{id}")
-    public ProfessionalExperience getProfessionalExperienceById(@PathVariable Long id){
+    public ProfessionalExperienceDTO getProfessionalExperienceById(@PathVariable Long id){
         ProfessionalExperience proExp = interProExpServ.getProfessionalExpById(id);
         
-        return proExp;
+        if(proExp == null)
+            return null;
+        
+        ProfessionalExperienceDTO proExpDTO = new ProfessionalExperienceDTO(proExp.getPosition(), proExp.getStartDate(), proExp.getEndDate(), proExp.getDescription());
+        
+        return proExpDTO;
     }
     
     @PostMapping("/professional_experience/create/{userId}/{enterpriseId}")

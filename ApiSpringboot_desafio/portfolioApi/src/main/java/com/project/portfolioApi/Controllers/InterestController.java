@@ -4,10 +4,12 @@
  */
 package com.project.portfolioApi.Controllers;
 
+import com.project.portfolioApi.DTO.InterestDTO;
 import com.project.portfolioApi.Models.Interest;
 import com.project.portfolioApi.Models.User;
 import com.project.portfolioApi.Services.IInterestService;
 import com.project.portfolioApi.Services.IUserService;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,17 +35,27 @@ public class InterestController {
     
     @GetMapping("/interest/get")
     @ResponseBody
-    public List<Interest> getInterests(){
-        List interests = interInterestServ.getInterests();
+    public List<InterestDTO> getInterests(){
+        List<Interest> interests = interInterestServ.getInterests();
+        List<InterestDTO> interestsDTO = new ArrayList();
         
-        return interests;
+        for(Interest i : interests){
+            interestsDTO.add(new InterestDTO(i.getDescription(), i.getLabel()));
+        }
+        
+        return interestsDTO;
     }
     
     @GetMapping("/interest/get/{id}")
-    public Interest getInterestById(@PathVariable Long id){
+    public InterestDTO getInterestById(@PathVariable Long id){
         Interest interest = interInterestServ.getInterestById(id);
         
-        return interest;
+        if(interest == null)
+            return null;
+            
+        InterestDTO interestDTO = new InterestDTO(interest.getDescription(), interest.getLabel());
+        
+        return interestDTO;
     }
     
     @PostMapping("/interest/create/{userId}")

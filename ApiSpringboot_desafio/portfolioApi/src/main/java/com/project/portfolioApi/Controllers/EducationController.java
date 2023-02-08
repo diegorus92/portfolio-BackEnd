@@ -1,12 +1,14 @@
 
 package com.project.portfolioApi.Controllers;
 
+import com.project.portfolioApi.DTO.EducationDTO;
 import com.project.portfolioApi.Models.Education;
 import com.project.portfolioApi.Models.Institution;
 import com.project.portfolioApi.Models.User;
 import com.project.portfolioApi.Services.IEducationService;
 import com.project.portfolioApi.Services.IInstitutionService;
 import com.project.portfolioApi.Services.IUserService;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,17 +37,27 @@ public class EducationController {
     
     @GetMapping("/educations/get")
     @ResponseBody
-    public List<Education> getEducations(){
-        List educations = interEduServ.getEducation();
+    public List<EducationDTO> getEducations(){
+        List<Education> educations = interEduServ.getEducation();
+        List<EducationDTO> educationsDTO = new ArrayList();
         
-        return educations;
+        for(Education e : educations){
+            educationsDTO.add(new EducationDTO(e.getDegree(), e.getStartDateYear(), e.getEndDateYear()));
+        }
+        
+        return educationsDTO;
     }
     
     @GetMapping("/education/get/{id}")
-    public Education getEducationById(@PathVariable Long id){
+    public EducationDTO getEducationById(@PathVariable Long id){
         Education education = interEduServ.getEducationById(id);
         
-        return education;
+        if(education == null)
+            return null;
+        
+        EducationDTO educationDTO = new EducationDTO(education.getDegree(), education.getStartDateYear(), education.getEndDateYear());
+        
+        return educationDTO;
     }
     
     @PostMapping("/education/create/{userId}/{institutionId}")

@@ -1,7 +1,9 @@
 package com.project.portfolioApi.Controllers;
 
+import com.project.portfolioApi.DTO.UserDTO;
 import com.project.portfolioApi.Models.User;
 import com.project.portfolioApi.Services.IUserService;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,17 +26,27 @@ public class UserController {
     
     @GetMapping("/users/get")
     @ResponseBody
-    public List<User> getUsers(){
-        List users = interUserServ.getUsers();
+    public List<UserDTO> getUsers(){
+        List<User> users = interUserServ.getUsers();
+        List<UserDTO> usersDTO = new ArrayList();
         
-        return users;
+        for(User u : users){
+            usersDTO.add(new UserDTO(u.getName(), u.getSurname(), u.getNickname(), u.getPosition(), u.getDescription(), u.getBannerSrc(), u.getProfileImageSrc()));
+        }
+        
+        return usersDTO;
     }
     
     @GetMapping("/user/get/{id}")
-    public User getUserById(@PathVariable Long id){
+    public UserDTO getUserById(@PathVariable Long id){
         User user = interUserServ.getUserById(id);
         
-        return user;
+        if(user == null)
+            return null;
+        
+        UserDTO userDTO = new UserDTO(user.getName(), user.getSurname(), user.getNickname(), user.getPosition(), user.getDescription(), user.getBannerSrc(), user.getProfileImageSrc());
+        
+        return userDTO;
     }
     
     @PostMapping("/user/create")
