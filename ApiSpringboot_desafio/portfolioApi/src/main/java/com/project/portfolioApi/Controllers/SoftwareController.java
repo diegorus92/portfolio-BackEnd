@@ -4,12 +4,14 @@
  */
 package com.project.portfolioApi.Controllers;
 
+import com.project.portfolioApi.DTO.SoftwareDTO;
 import com.project.portfolioApi.Models.Software;
 import com.project.portfolioApi.Models.SoftwareValue;
 import com.project.portfolioApi.Models.User;
 import com.project.portfolioApi.Services.ISoftwareService;
 import com.project.portfolioApi.Services.ISoftwareValueService;
 import com.project.portfolioApi.Services.IUserService;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,17 +40,26 @@ public class SoftwareController {
     
     @GetMapping("/software/get")
     @ResponseBody
-    public List<Software> getSoftwares(){
-        List softwares = interSoftwareServ.getSoftwares();
+    public List<SoftwareDTO> getSoftwares(){
+        List<Software> softwares = interSoftwareServ.getSoftwares();
+        List<SoftwareDTO> softwaresDTO = new ArrayList();
         
-        return softwares;
+        for(Software s : softwares)
+            softwaresDTO.add(new SoftwareDTO(s.getName()));
+        
+        return softwaresDTO;
     }
     
     @GetMapping("/software/get/{id}")
-    public Software getSoftwareById(@PathVariable Long id){
+    public SoftwareDTO getSoftwareById(@PathVariable Long id){
         Software software = interSoftwareServ.getSoftwareById(id);
         
-        return software;
+        if(software == null)
+            return null;
+        
+        SoftwareDTO softwareDTO = new SoftwareDTO(software.getName());
+        
+        return softwareDTO;
     }
     
     @PostMapping("/software/create/{softwareValueId}/{userId}")

@@ -4,12 +4,14 @@
  */
 package com.project.portfolioApi.Controllers;
 
+import com.project.portfolioApi.DTO.ContactDTO;
 import com.project.portfolioApi.Models.Contact;
 import com.project.portfolioApi.Models.ContactIcon;
 import com.project.portfolioApi.Models.User;
 import com.project.portfolioApi.Services.IContactIconService;
 import com.project.portfolioApi.Services.IContactService;
 import com.project.portfolioApi.Services.IUserService;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,17 +40,26 @@ public class ContactController {
     
     @GetMapping("/contact/get")
     @ResponseBody
-    public List<Contact> getContacts(){
-        List contacts = interContactServ.getContacts();
+    public List<ContactDTO> getContacts(){
+        List<Contact> contacts = interContactServ.getContacts();
+        List<ContactDTO> contactsDTO = new ArrayList();
         
-        return contacts;
+        for(Contact c : contacts)
+            contactsDTO.add(new ContactDTO(c.getData()));
+        
+        return contactsDTO;
     }
     
     @GetMapping("/contact/get/{id}")
-    public Contact getContactById(@PathVariable Long id){
+    public ContactDTO getContactById(@PathVariable Long id){
         Contact contact = interContactServ.getContactById(id);
         
-        return contact;
+        if(contact == null)
+            return null;
+        
+        ContactDTO contactDTO = new ContactDTO(contact.getData());
+        
+        return contactDTO;
     }
     
     @PostMapping("/contact/create/{contactIconId}/{userId}")

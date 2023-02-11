@@ -4,10 +4,12 @@
  */
 package com.project.portfolioApi.Controllers;
 
+import com.project.portfolioApi.DTO.IdiomDTO;
 import com.project.portfolioApi.Models.Idiom;
 import com.project.portfolioApi.Models.User;
 import com.project.portfolioApi.Services.IIdiomService;
 import com.project.portfolioApi.Services.IUserService;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,17 +35,26 @@ public class IdiomController {
     
     @GetMapping("/idiom/get")
     @ResponseBody
-    public List<Idiom> getIdioms(){
-        List idioms = interIdiomServ.getIdioms();
+    public List<IdiomDTO> getIdioms(){
+        List<Idiom> idioms = interIdiomServ.getIdioms();
+        List<IdiomDTO> idiomsDTO = new ArrayList();
         
-        return idioms;
+        for(Idiom i : idioms)
+            idiomsDTO.add(new IdiomDTO(i.getName(), i.getValue()));
+        
+        return idiomsDTO;
     }
     
     @GetMapping("/idiom/get/{id}")
-    public Idiom getIdiomtById(@PathVariable Long id){
+    public IdiomDTO getIdiomtById(@PathVariable Long id){
         Idiom idiom = interIdiomServ.getIdiomById(id);
         
-        return idiom;
+        if(idiom == null)
+            return null;
+        
+        IdiomDTO idiomDTO = new IdiomDTO(idiom.getName(), idiom.getValue());
+        
+        return idiomDTO;
     }
     
     @PostMapping("/idiom/create/{userId}")

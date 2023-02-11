@@ -4,8 +4,10 @@
  */
 package com.project.portfolioApi.Controllers;
 
+import com.project.portfolioApi.DTO.SoftwareValueDTO;
 import com.project.portfolioApi.Models.SoftwareValue;
 import com.project.portfolioApi.Services.ISoftwareValueService;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,17 +30,26 @@ public class SoftwareValueController {
     
     @GetMapping("/softwarevalue/get")
     @ResponseBody
-    public List<SoftwareValue> getSoftwareValues(){
-        List softwareValues = interSoftwareValueServ.getSoftwareValues();
+    public List<SoftwareValueDTO> getSoftwareValues(){
+        List<SoftwareValue> softwareValues = interSoftwareValueServ.getSoftwareValues();
+        List<SoftwareValueDTO> softwareValuesDTO = new ArrayList();
         
-        return softwareValues;
+        for(SoftwareValue sv : softwareValues)
+            softwareValuesDTO.add(new SoftwareValueDTO(sv.getValue()));
+        
+        return softwareValuesDTO;
     }
     
     @GetMapping("/softwarevalue/get/{id}")
-    public SoftwareValue getSoftwareValueById(@PathVariable Long id){
+    public SoftwareValueDTO getSoftwareValueById(@PathVariable Long id){
         SoftwareValue softwareValue = interSoftwareValueServ.getSoftwareValueById(id);
         
-        return softwareValue;
+        if(softwareValue == null)
+            return null;
+        
+        SoftwareValueDTO softwareValueDTO = new SoftwareValueDTO(softwareValue.getValue());
+        
+        return softwareValueDTO;
     }
     
     @PostMapping("/softwarevalue/create")

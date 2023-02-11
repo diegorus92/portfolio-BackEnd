@@ -4,8 +4,10 @@
  */
 package com.project.portfolioApi.Controllers;
 
+import com.project.portfolioApi.DTO.SocialNetIconDTO;
 import com.project.portfolioApi.Models.SocialNetIcon;
 import com.project.portfolioApi.Services.ISocialNetIconService;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,17 +30,26 @@ public class SocialNetIconController {
     
     @GetMapping("/socialneticon/get")
     @ResponseBody
-    public List<SocialNetIcon> getSocialNetIcons(){
-        List socialNetIcons = interSNIServ.getSocialNetIcons();
+    public List<SocialNetIconDTO> getSocialNetIcons(){
+        List<SocialNetIcon> socialNetIcons = interSNIServ.getSocialNetIcons();
+        List<SocialNetIconDTO> socialNetIconsDTO = new ArrayList();
         
-        return socialNetIcons;
+        for(SocialNetIcon sni : socialNetIcons)
+            socialNetIconsDTO.add(new SocialNetIconDTO(sni.getName()));
+        
+        return socialNetIconsDTO;
     }
     
     @GetMapping("/socialneticon/get/{id}")
-    public SocialNetIcon getSocialNetIconById(@PathVariable Long id){
+    public SocialNetIconDTO getSocialNetIconById(@PathVariable Long id){
         SocialNetIcon socialNetIcon = interSNIServ.getSocialNetIconById(id);
         
-        return socialNetIcon;
+        if(socialNetIcon == null)
+            return null;
+        
+        SocialNetIconDTO socialNetIconDTO = new SocialNetIconDTO(socialNetIcon.getName());
+        
+        return socialNetIconDTO;
     }
     
     @PostMapping("/socialneticon/create")

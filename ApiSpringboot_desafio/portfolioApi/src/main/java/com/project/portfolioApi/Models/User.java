@@ -58,4 +58,7 @@ public class User {
     
     @OneToOne(mappedBy="user")
     private Reference reference;
+    
+    @OneToMany(mappedBy="user")
+    private List<Skill> skills;
 }

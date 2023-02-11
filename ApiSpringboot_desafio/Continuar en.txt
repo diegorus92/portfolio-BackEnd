@@ -47,7 +47,7 @@ Desarrollar Modelos y relaciones para Skill y SkillType; ---> OK
 
 -----------------------------------------------------------------------------------------------
 
-Desarrollar Relaciones entre Skill, SkillType y User;
+Desarrollar Relaciones entre Skill, SkillType y User;---> OK
 
 -----------------------------------------------------------------------------------------------
 

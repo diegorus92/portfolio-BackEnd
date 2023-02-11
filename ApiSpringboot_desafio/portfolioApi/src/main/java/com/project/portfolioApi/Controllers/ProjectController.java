@@ -4,10 +4,12 @@
  */
 package com.project.portfolioApi.Controllers;
 
+import com.project.portfolioApi.DTO.ProjectDTO;
 import com.project.portfolioApi.Models.Project;
 import com.project.portfolioApi.Models.User;
 import com.project.portfolioApi.Services.IProjectService;
 import com.project.portfolioApi.Services.IUserService;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,17 +35,26 @@ public class ProjectController {
     
     @GetMapping("/project/get")
     @ResponseBody
-    public List<Project> getProjects(){
-        List projects = interProjectServ.getProjects();
+    public List<ProjectDTO> getProjects(){
+        List<Project> projects = interProjectServ.getProjects();
+        List<ProjectDTO> projectsDTO = new ArrayList();
         
-        return projects;
+        for(Project p : projects)
+            projectsDTO.add(new ProjectDTO(p.getTitle(), p.getDescription(), p.getImageSrc(), p.getProjectLink()));
+        
+        return projectsDTO;
     }
     
     @GetMapping("/project/get/{id}")
-    public Project getProjectById(@PathVariable Long id){
+    public ProjectDTO getProjectById(@PathVariable Long id){
         Project project = interProjectServ.getProjectById(id);
         
-        return project;
+        if(project == null)
+            return null;
+        
+        ProjectDTO projectDTO = new ProjectDTO(project.getTitle(), project.getDescription(), project.getImageSrc(), project.getProjectLink());
+        
+        return projectDTO;
     }
     
     @PostMapping("/project/create/{userId}")

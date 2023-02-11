@@ -25,9 +25,9 @@ public class Contact {
     private String data;
     
     @ManyToOne
-    User user;
+    private User user;
     
     @ManyToOne
-    ContactIcon contactIcon;
+    private ContactIcon contactIcon;
     
 }

@@ -6,7 +6,11 @@ package com.project.portfolioApi.Controllers;
 
 import com.project.portfolioApi.DTO.SkillDTO;
 import com.project.portfolioApi.Models.Skill;
+import com.project.portfolioApi.Models.SkillType;
+import com.project.portfolioApi.Models.User;
 import com.project.portfolioApi.Services.ISkillService;
+import com.project.portfolioApi.Services.ISkillTypeService;
+import com.project.portfolioApi.Services.IUserService;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +31,12 @@ public class SkillController {
     
     @Autowired
     ISkillService interSkillServ;
+    
+    @Autowired 
+    ISkillTypeService interSkillTypeServ;
+    
+    @Autowired
+    IUserService interUserServ;
     
     @GetMapping("/skills/get")
     @ResponseBody
@@ -53,9 +63,22 @@ public class SkillController {
         return skillDTO;
     }
     
-    @PostMapping("/skill/create")
-    public String createSkill(@RequestBody Skill newSkill){
+    @PostMapping("/skill/create/{skillTypeId}/{userId}")
+    public String createSkill(@RequestBody Skill newSkill, @PathVariable Long skillypeId, @PathVariable Long userId){
         
+        SkillType skillTypeTarget = interSkillTypeServ.getSkillTypeById(skillypeId);
+        User userTarget = interUserServ.getUserById(userId);
+        
+        if(skillTypeTarget == null)
+            return "Skill Type not found";
+        if(userTarget == null)
+            return "User not found";
+        
+        skillTypeTarget.getSkills().add(newSkill);
+        userTarget.getSkills().add(newSkill);
+        
+        newSkill.setSkillType(skillTypeTarget);
+        newSkill.setUser(userTarget);
         interSkillServ.createSkill(newSkill);
         
         return "Skill creation success!";

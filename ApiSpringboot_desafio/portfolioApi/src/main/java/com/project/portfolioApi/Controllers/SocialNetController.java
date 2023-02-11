@@ -4,12 +4,14 @@
  */
 package com.project.portfolioApi.Controllers;
 
+import com.project.portfolioApi.DTO.SocialNetDTO;
 import com.project.portfolioApi.Models.SocialNet;
 import com.project.portfolioApi.Models.SocialNetIcon;
 import com.project.portfolioApi.Models.User;
 import com.project.portfolioApi.Services.ISocialNetIconService;
 import com.project.portfolioApi.Services.ISocialNetService;
 import com.project.portfolioApi.Services.IUserService;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,17 +40,26 @@ public class SocialNetController {
     
     @GetMapping("/socialnet/get")
     @ResponseBody
-    public List<SocialNet> getSocialNets(){
-        List socialNets = interSocialNetServ.getSocialNets();
+    public List<SocialNetDTO> getSocialNets(){
+        List<SocialNet> socialNets = interSocialNetServ.getSocialNets();
+        List<SocialNetDTO> socialNetsDTO = new ArrayList();
         
-        return socialNets;
+        for(SocialNet sn : socialNets)
+            socialNetsDTO.add(new SocialNetDTO(sn.getIconName(), sn.getLink()));
+        
+        return socialNetsDTO;
     }
     
     @GetMapping("/socialnet/get/{id}")
-    public SocialNet getSocialNetById(@PathVariable Long id){
+    public SocialNetDTO getSocialNetById(@PathVariable Long id){
         SocialNet socialNet = interSocialNetServ.getSocialNetById(id);
         
-        return socialNet;
+        if(socialNet == null)
+            return null;
+        
+        SocialNetDTO socialNetDTO = new SocialNetDTO(socialNet.getIconName(), socialNet.getLink());
+        
+        return socialNetDTO;
     }
     
     @PostMapping("/socialnet/create/{iconId}/{userId}")

@@ -4,8 +4,10 @@
  */
 package com.project.portfolioApi.Controllers;
 
+import com.project.portfolioApi.DTO.ContactIconDTO;
 import com.project.portfolioApi.Models.ContactIcon;
 import com.project.portfolioApi.Services.IContactIconService;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,17 +30,26 @@ public class ContactIconController {
     
     @GetMapping("/contacticon/get")
     @ResponseBody
-    public List<ContactIcon> getContactIcons(){
-        List contactIcons = interContactIconServ.getContactIcons();
+    public List<ContactIconDTO> getContactIcons(){
+        List<ContactIcon> contactIcons = interContactIconServ.getContactIcons();
+        List<ContactIconDTO> contactIconsDTO = new ArrayList();
         
-        return contactIcons;
+        for(ContactIcon ci : contactIcons)
+            contactIconsDTO.add(new ContactIconDTO(ci.getName()));
+        
+        return contactIconsDTO;
     }
     
     @GetMapping("/contacticon/get/{id}")
-    public ContactIcon getContactIconById(@PathVariable Long id){
+    public ContactIconDTO getContactIconById(@PathVariable Long id){
         ContactIcon contactIcon = interContactIconServ.getContactIconById(id);
         
-        return contactIcon;
+        if(contactIcon == null)
+            return null;
+                    
+        ContactIconDTO contactIconDTO = new ContactIconDTO(contactIcon.getName());      
+        
+        return contactIconDTO;
     }
     
     @PostMapping("/contacticon/create")

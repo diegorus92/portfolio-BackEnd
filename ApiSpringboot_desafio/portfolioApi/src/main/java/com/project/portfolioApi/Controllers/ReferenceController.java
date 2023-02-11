@@ -4,10 +4,12 @@
  */
 package com.project.portfolioApi.Controllers;
 
+import com.project.portfolioApi.DTO.ReferenceDTO;
 import com.project.portfolioApi.Models.Reference;
 import com.project.portfolioApi.Models.User;
 import com.project.portfolioApi.Services.IReferenceService;
 import com.project.portfolioApi.Services.IUserService;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,17 +35,26 @@ public class ReferenceController {
     
     @GetMapping("/reference/get")
     @ResponseBody
-    public List<Reference> getReferences(){
-        List references = interReferenceServ.getReferences();
+    public List<ReferenceDTO> getReferences(){
+        List<Reference> references = interReferenceServ.getReferences();
+        List<ReferenceDTO> referencesDTO = new ArrayList();
         
-        return references;
+        for(Reference r : references)
+            referencesDTO.add(new ReferenceDTO(r.getName(), r.getSurname(), r.getPhone(), r.getEmail(), r.getPosition()));
+        
+        return referencesDTO;
     }
     
     @GetMapping("/reference/get/{id}")
-    public Reference getReferenceById(@PathVariable Long id){
+    public ReferenceDTO getReferenceById(@PathVariable Long id){
         Reference reference = interReferenceServ.getReferenceById(id);
         
-        return reference;
+        if(reference == null)
+            return null;
+        
+        ReferenceDTO referenceDTO = new ReferenceDTO(reference.getName(), reference.getSurname(), reference.getEmail(), reference.getPhone(), reference.getPosition());
+        
+        return referenceDTO;
     }
     
     @PostMapping("/reference/create/{userId}")
