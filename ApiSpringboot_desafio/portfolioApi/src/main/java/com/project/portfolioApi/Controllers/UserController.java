@@ -33,7 +33,7 @@ public class UserController {
         List<UserDTO> usersDTO = new ArrayList();
         
         for(User u : users){
-            usersDTO.add(new UserDTO(u.getName(), u.getSurname(), u.getNickname(), u.getPosition(), u.getDescription(), u.getBannerSrc(), u.getProfileImageSrc()));
+            usersDTO.add(new UserDTO(u.getUserId(), u.getName(), u.getSurname(), u.getPosition(), u.getDescription()));
         }
         
         return usersDTO;
@@ -46,7 +46,7 @@ public class UserController {
         if(user == null)
             return null;
         
-        UserDTO userDTO = new UserDTO(user.getName(), user.getSurname(), user.getNickname(), user.getPosition(), user.getDescription(), user.getBannerSrc(), user.getProfileImageSrc());
+        UserDTO userDTO = new UserDTO(id, user.getName(), user.getSurname(),  user.getPosition(), user.getDescription());
         
         return userDTO;
     }
@@ -59,36 +59,28 @@ public class UserController {
         return "User creation success!";
     }
     
+    
     @PutMapping("/user/update/{id}")
-    public ResponseEntity<String> updateUser(
+    public void updateUser( //Devuelve void porque al devolver un objeto HttpRequest, genera error en angular al hacer el put
             @PathVariable Long id,
-            @RequestParam("name") String name,
-            @RequestParam("surname") String surname,
-            @RequestParam("nickname") String nickname,
-            @RequestParam("password") String password,
-            @RequestParam("position") String position,
-            @RequestParam("description") String description,
-            @RequestParam("bannerSrc") String banner,
-            @RequestParam("profileImageSrc") String profileImage){
+            @RequestBody User user){
         
         User userToUpdate = interUserServ.getUserById(id);
         
         if(userToUpdate == null)
-            return new ResponseEntity<>("User not found whit that ID", HttpStatus.NO_CONTENT);
+            return;
         
-        userToUpdate.setName(name);
-        userToUpdate.setSurname(surname);
-        userToUpdate.setNickname(nickname);
-        userToUpdate.setPassword(password);
-        userToUpdate.setPosition(position);
-        userToUpdate.setDescription(description);
-        userToUpdate.setProfileImageSrc(profileImage);
-        userToUpdate.setBannerSrc(banner);
+        userToUpdate.setUserId(id);
+        userToUpdate.setName(user.getName());
+        userToUpdate.setSurname(user.getSurname());
+        userToUpdate.setPosition(user.getPosition());
+        userToUpdate.setDescription(user.getDescription());
         
         interUserServ.createUser(userToUpdate);
         
-        return new ResponseEntity<>("User successfuly updated", HttpStatus.OK);
+        
     }
+    
     
     @DeleteMapping("/user/delete/{id}")
     public String deleteUser(@PathVariable Long id){

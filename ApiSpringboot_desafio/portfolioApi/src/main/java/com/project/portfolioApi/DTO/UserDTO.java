@@ -9,24 +9,33 @@ import java.io.Serializable;
 
 public class UserDTO implements Serializable{
     
+    private Long userId;
     private String name;
     private String surname;
-    private String nickname;
     private String position;
     private String description;
-    private String bannerSrc;
-    private String profileImageSrc;
 
-    public UserDTO(String name, String surname, String nickname, String position, String description, String bannerSrc, String profileImageSrc) {
+    public UserDTO(Long userId, String name, String surname, String position, String description) {
+        
+        this.userId = userId;
         this.name = name;
         this.surname = surname;
-        this.nickname = nickname;
         this.position = position;
         this.description = description;
-        this.bannerSrc = bannerSrc;
-        this.profileImageSrc = profileImageSrc;
+    }
+    
+    public UserDTO(String name, String surname, String position, String description) {
+       
+        this.name = name;
+        this.surname = surname;
+        this.position = position;
+        this.description = description;
     }
 
+    public Long getUserId(){
+        return userId;
+    }
+    
     public String getName() {
         return name;
     }
@@ -35,9 +44,6 @@ public class UserDTO implements Serializable{
         return surname;
     }
 
-    public String getNickname() {
-        return nickname;
-    }
 
     public String getPosition() {
         return position;
@@ -47,13 +53,26 @@ public class UserDTO implements Serializable{
         return description;
     }
 
-    public String getBannerSrc() {
-        return bannerSrc;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public String getProfileImageSrc() {
-        return profileImageSrc;
+    public void setName(String name) {
+        this.name = name;
     }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     
     
 }
